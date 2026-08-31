@@ -1,15 +1,3 @@
-```markdown
-<div align="center">
-  <h1>Khayal Edit (خيال إديت)</h1>
-  <p><strong>Next-Gen AI-Powered Photo & Visual Optics Editor</strong></p>
-
-  [![GitHub License](https://img.shields.io/github/license/Mr-Brook-maker/KHAYAL-EDIT)](LICENSE)
-  [![GitHub Stars](https://img.shields.io/github/stars/Mr-Brook-maker/KHAYAL-EDIT)](https://github.com/Mr-Brook-maker/KHAYAL-EDIT/stargazers)
-  [![GitHub Issues](https://img.shields.io/github/issues/Mr-Brook-maker/KHAYAL-EDIT)](https://github.com/Mr-Brook-maker/KHAYAL-EDIT/issues)
-</div>
-
----
-
 ## 📌 About The Project
 
 **Khayal Edit** is a cutting-edge, futuristic photo editing platform designed to merge real-world photography with artificial intelligence and cyberpunk aesthetics. Powered by an advanced **AI Optics Engine**, it enables photographers, digital artists, and creators to transform standard images into high-tech, futuristic visual art seamlessly.
