@@ -1,0 +1,37 @@
+multimodal_agent/
+│
+├── app.py                          # Gradio entry point
+├── main.py                         # CLI entry point
+├── requirements.txt                # All dependencies
+├── Dockerfile                      # Container build
+├── .env.example                    # Environment template
+├── .huggingface/
+│   └── README.md                   # HF Spaces config
+│
+├── agent/                          # Part 1 — Agent & LLM
+│   ├── config.py
+│   ├── llm_factory.py
+│   ├── orchestrator.py
+│   ├── tool_schemas.py
+│   └── tools.py
+│
+├── image_engine/                   # Part 2 — Image CV
+│   ├── processor.py
+│   ├── local_ops.py
+│   ├── api_ops.py
+│   ├── result.py
+│   └── path_manager.py
+│
+├── video_engine/                   # Part 3 — Video
+│   ├── processor.py
+│   ├── local_ops.py
+│   ├── api_ops.py
+│   ├── async_queue.py
+│   ├── schemas.py
+│   └── path_manager.py
+│
+├── devops/                         # Part 4 — DevOps
+│   ├── rate_limiter.py
+│   └── cache.py
+│
+└── outputs/   temp/   cache/       # Auto-created at runtime

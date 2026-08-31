@@ -1,0 +1,14 @@
+# Single task
+python main.py -i portrait.jpg -p "Remove the background"
+
+# Chained pipeline (agent handles all steps automatically)
+python main.py -i product.jpg \
+  -p "Remove background, apply cinematic filter, resize to 800x800 fill mode, convert to webp"
+
+# Object removal
+python main.py -p "Remove the person on the left from ./photo.jpg"
+
+# Interactive session  
+python main.py --interactive
+# >>> You: Take office.jpg, make it vintage, expand the canvas 200px on each side
+# >>> You: Now resize that to 1920x1080 and save as JPEG

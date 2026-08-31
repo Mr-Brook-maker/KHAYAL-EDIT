@@ -1,0 +1,16 @@
+# Clone + install
+git clone <your-repo> && cd multimodal_agent
+python -m venv venv && source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install torch --index-url https://download.pytorch.org/whl/cpu  # CPU-only torch
+pip install -r requirements.txt
+
+# Configure (copy and fill in your free API keys)
+cp .env.example .env && nano .env
+
+# Launch web UI
+python app.py
+# → Open http://localhost:7860
+
+# OR use CLI
+python main.py --interactive
+python main.py -i photo.jpg -p "Remove background, apply vintage filter, resize to 800x800"

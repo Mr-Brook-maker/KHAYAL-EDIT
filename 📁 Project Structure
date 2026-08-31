@@ -1,0 +1,23 @@
+multimodal_agent/
+├── .env
+├── .env.example
+├── requirements.txt
+├── main.py                        # CLI entry point
+│
+├── agent/
+│   ├── __init__.py
+│   ├── config.py                  # Settings (pydantic-settings)
+│   ├── llm_factory.py             # Gemini/Groq abstraction
+│   ├── tool_schemas.py            # Pydantic input schemas
+│   ├── tools.py                   # LangChain StructuredTools
+│   └── orchestrator.py            # AgentExecutor + memory
+│
+├── image_engine/
+│   ├── __init__.py
+│   ├── result.py                  # ProcessingResult dataclass
+│   ├── path_manager.py            # Output path logic
+│   ├── local_ops.py               # rembg, OpenCV, Pillow ops
+│   ├── api_ops.py                 # HuggingFace, Fal.ai ops
+│   └── processor.py              # Unified router
+│
+└── outputs/                       # Auto-created

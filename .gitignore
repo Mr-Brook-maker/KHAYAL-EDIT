@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+*.mp4
+*.png
+*.jpg
+*.gif
+all_code.txt
+venv/
+.vscode/
