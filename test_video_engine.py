@@ -657,9 +657,16 @@ class TestAppSyntax(unittest.TestCase):
         with open(app_path, "r", encoding="utf-8") as f:
             source = f.read()
         tree = ast.parse(source)
-        # Verify vid_result_handler function exists and is properly indented
         func_names = [node.name for node in ast.walk(tree) if isinstance(node, ast.FunctionDef)]
-        self.assertIn("vid_result_handler", func_names, "vid_result_handler function not found in app.py")
+        expected_funcs = [
+            "handle_remove_bg", "handle_resize", "handle_color_adjust",
+            "handle_apply_filter", "handle_trim_video", "handle_extract_audio",
+            "handle_speed", "handle_to_gif", "handle_animate_image",
+            "handle_agent_chat", "clear_agent_memory", "get_system_status",
+            "handle_clear_cache", "build_ui", "_find_available_port",
+        ]
+        for func in expected_funcs:
+            self.assertIn(func, func_names, msg=f"{func} function not found in app.py")
 
 
 # ─────────────────────────────────────────────────────────────────────────────

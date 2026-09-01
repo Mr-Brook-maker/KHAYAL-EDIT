@@ -108,7 +108,6 @@ class RateLimitedExecutor:
 
     def _register_keys_from_env(self):
         """Load all API keys from env — supports comma-separated multiple keys."""
-
         key_map = {
             Provider.GEMINI:      "GOOGLE_API_KEY",
             Provider.GROQ:        "GROQ_API_KEY",
@@ -117,7 +116,7 @@ class RateLimitedExecutor:
             Provider.FAL:         "FAL_API_KEY",
         }
         multi_key_map = {
-            Provider.GEMINI:      "GOOGLE_API_KEYS",     # Comma-separated fallback keys
+            Provider.GEMINI:      "GOOGLE_API_KEYS",
             Provider.GROQ:        "GROQ_API_KEYS",
             Provider.HUGGINGFACE: "HF_API_TOKENS",
         }
@@ -126,16 +125,25 @@ class RateLimitedExecutor:
             key = os.getenv(env_var, "")
             if key:
                 self._pools[provider].add_key(key)
+                logger.info("Registered %s key from %s", provider.value, env_var)
+            else:
+                logger.debug("No %s key found in env var %s", provider.value, env_var)
 
         for provider, env_var in multi_key_map.items():
             keys_str = os.getenv(env_var, "")
-            for k in keys_str.split(","):
-                k = k.strip()
-                if k:
-                    self._pools[provider].add_key(k)
+            if keys_str:
+                for k in keys_str.split(","):
+                    k = k.strip()
+                    if k:
+                        self._pools[provider].add_key(k)
+                        logger.info("Registered additional %s key from %s", provider.value, env_var)
 
         for p, pool in self._pools.items():
-            logger.info(f"Provider {p.value}: {len(pool.keys)} key(s) registered")
+            logger.info(
+                "Provider %s: %d key(s) registered",
+                p.value,
+                len(pool.keys),
+            )
 
     def call(
         self,

@@ -10,13 +10,18 @@ Features:
 - Direct tool controls (no LLM needed for simple ops)
 """
 
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path=Path(__file__).parent / ".env")
+
 import asyncio
 import json
 import logging
 import os
 import threading
 import time
-from pathlib import Path
 from typing import Optional, Generator
 
 import gradio as gr
@@ -448,16 +453,17 @@ input[type=range]::-webkit-slider-thumb { background: var(--primary) !important;
 
 # ── Build UI ──────────────────────────────────────────────────────────────────
 
+# تعريف الثيم والتنسيق لاستخدامهما لاحقاً
+theme_obj = gr.themes.Base(
+    primary_hue="purple",
+    secondary_hue="cyan",
+    neutral_hue="slate",
+    font=gr.themes.GoogleFont("Inter"),
+)
+
 def build_ui() -> gr.Blocks:
     with gr.Blocks(
-        css=CSS,
         title="🎨 Multimodal AI Editor",
-        theme=gr.themes.Base(
-            primary_hue="purple",
-            secondary_hue="cyan",
-            neutral_hue="slate",
-            font=gr.themes.GoogleFont("Inter"),
-        ),
     ) as demo:
 
         # ── Header ────────────────────────────────────────────────────────────
@@ -484,6 +490,7 @@ def build_ui() -> gr.Blocks:
                             label="Agent Conversation",
                             elem_classes=["chatbot"],
                             height=480,
+                            type="tuples",
                             avatar_images=(None, "https://img.icons8.com/fluency/48/robot.png"),
                         )
                         with gr.Row():
@@ -780,6 +787,59 @@ def build_ui() -> gr.Blocks:
     return demo
 
 
+def _find_available_port(start_port: int = 7860, max_attempts: int = 20) -> int:
+    """Find an available TCP port starting from start_port."""
+    for port in range(start_port, start_port + max_attempts):
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                s.bind(("0.0.0.0", port))
+            return port
+        except OSError:
+            continue
+    raise RuntimeError(f"No available port found in range {start_port}-{start_port + max_attempts - 1}")
+
+
+def _find_favicon() -> Optional[str]:
+    """
+    Locate an optional favicon/icon file for Gradio.
+    Checks common project locations. Returns path if found, else None.
+    """
+    candidates = [
+        Path("img/Logo Favicon.jpeg"),
+        Path("img/favicon.ico"),
+        Path("img/favicon.png"),
+        Path("assets/icon.ico"),
+        Path("assets/favicon.png"),
+        Path("favicon.ico"),
+        Path("favicon.png"),
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return str(candidate)
+    return None
+
+
 if __name__ == "__main__":
     ui = build_ui()
-    ui.queue().launch(server_name="0.0.0.0", server_port=7860)
+    allowed_img_paths = [
+        "img/Hero Section.jpeg",
+        "img/KhayalEdit + AI Brain.jpeg",
+        "img/Logo Favicon.jpeg"
+    ]
+    port = _find_available_port()
+    favicon = _find_favicon()
+    launch_kwargs = {
+        "server_name": "0.0.0.0",
+        "server_port": port,
+        "allowed_paths": allowed_img_paths,
+        "css": CSS,
+        "theme": theme_obj,
+    }
+    if favicon:
+        launch_kwargs["favicon_path"] = favicon
+        logger.info("Using favicon: %s", favicon)
+    else:
+        logger.info("No favicon found; using Gradio default.")
+    logger.info("Launching Gradio UI on port %d", port)
+    ui.queue().launch(**launch_kwargs)
